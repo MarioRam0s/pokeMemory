@@ -26,6 +26,7 @@ const Color $water = Color.fromRGBO(100, 147, 235, 1);
 
 const Color $white = Colors.white;
 const Color $black = Colors.black;
+const Color $transparent = Colors.transparent;
 
 //Fonts
 const String $fontPokemon = "Pokemon";
