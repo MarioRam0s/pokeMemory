@@ -62,10 +62,10 @@ class _PokeListPageState extends State<PokeListPage> {
           ],
         ),
       ),
-      backgroundColor: $primary,
+      backgroundColor: $colorPrimary,
       body: Container(
         decoration: BoxDecoration(
-          color: $secondary,
+          color: $colorSecondary,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         margin: EdgeInsets.all(5),
@@ -87,7 +87,7 @@ class _PokeListPageState extends State<PokeListPage> {
         ),
       ),
       floatingActionButton: SpeedDial(
-        backgroundColor: $primary,
+        backgroundColor: $colorPrimary,
         spaceBetweenChildren: 20,
         overlayColor: $black,
         children: [
@@ -97,22 +97,31 @@ class _PokeListPageState extends State<PokeListPage> {
               width: 25,
               fit: BoxFit.contain,
               $iconPokeball,
-              colorFilter: ColorFilter.mode($primary, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode($colorPrimary, BlendMode.srcIn),
             ),
             label: 'All',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.favorite, color: $primary),
+            child: Icon(Icons.favorite, color: $colorPrimary),
             label: 'Favorite',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.filter_alt, color: $primary),
+            child: Icon(Icons.filter_alt, color: $colorPrimary),
             label: 'Generations',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
         ],
@@ -144,7 +153,7 @@ class CardPokemon extends StatelessWidget {
         width: 105,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: $psychic,
+          color: $colorPsychic,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -193,11 +202,11 @@ class CardPokemon extends StatelessWidget {
                   fit: BoxFit.contain,
                   $backgroundPokeball,
                 ),
-                SvgPicture.asset(
+                Image.asset(
                   height: 60,
                   width: 60,
                   fit: BoxFit.contain,
-                  $placeholder,
+                  $loading,
                 ),
               ],
             ),
