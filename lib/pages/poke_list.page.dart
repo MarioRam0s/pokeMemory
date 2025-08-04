@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:pokememory/pages/details_pokemon/details_pokemon.page.dart';
 import 'package:pokememory/utils/const_desing.dart';
 
-class PokeList extends StatefulWidget {
-  const PokeList({super.key});
+class PokeListPage extends StatefulWidget {
+  const PokeListPage({super.key});
 
   @override
-  State<PokeList> createState() => _PokeListState();
+  State<PokeListPage> createState() => _PokeListPageState();
 }
 
-class _PokeListState extends State<PokeList> {
+class _PokeListPageState extends State<PokeListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,10 +62,10 @@ class _PokeListState extends State<PokeList> {
           ],
         ),
       ),
-      backgroundColor: $primary,
+      backgroundColor: $colorPrimary,
       body: Container(
         decoration: BoxDecoration(
-          color: $secondary,
+          color: $colorSecondary,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         margin: EdgeInsets.all(5),
@@ -86,7 +87,7 @@ class _PokeListState extends State<PokeList> {
         ),
       ),
       floatingActionButton: SpeedDial(
-        backgroundColor: $primary,
+        backgroundColor: $colorPrimary,
         spaceBetweenChildren: 20,
         overlayColor: $black,
         children: [
@@ -96,22 +97,31 @@ class _PokeListState extends State<PokeList> {
               width: 25,
               fit: BoxFit.contain,
               $iconPokeball,
-              colorFilter: ColorFilter.mode($primary, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode($colorPrimary, BlendMode.srcIn),
             ),
             label: 'All',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.favorite, color: $primary),
+            child: Icon(Icons.favorite, color: $colorPrimary),
             label: 'Favorite',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.filter_alt, color: $primary),
+            child: Icon(Icons.filter_alt, color: $colorPrimary),
             label: 'Generations',
-            labelStyle: TextStyle(color: $primary, fontWeight: FontWeight.bold),
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
             shape: CircleBorder(),
           ),
         ],
@@ -129,70 +139,80 @@ class CardPokemon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 105,
-      width: 105,
-      padding: EdgeInsets.all(5),
-      decoration: BoxDecoration(
-        color: $psychic,
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: $white,
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                ),
-                padding: EdgeInsets.all(1),
-                child: Row(
-                  children: [
-                    SvgPicture.asset(
-                      height: 10,
-                      width: 10,
-                      fit: BoxFit.contain,
-                      $iconBug,
-                    ),
-                    SizedBox(width: 2),
-                    SvgPicture.asset(
-                      height: 10,
-                      width: 10,
-                      fit: BoxFit.contain,
-                      $iconFire,
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerRight,
-                  child: Text('#0151', style: TextStyle(color: $white)),
-                ),
-              ),
-            ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute<void>(
+            builder: (BuildContext context) => const DetailsPokemonPage(),
           ),
-          SizedBox(height: 3),
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              SvgPicture.asset(
-                height: 50,
-                width: 50,
-                fit: BoxFit.contain,
-                $backgroundPokeball,
-              ),
-              SvgPicture.asset(
-                height: 60,
-                width: 60,
-                fit: BoxFit.contain,
-                $placeholder,
-              ),
-            ],
-          ),
-          Text('Mew'),
-        ],
+        );
+      },
+      child: Container(
+        height: 105,
+        width: 105,
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: $colorPsychic,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: $white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  padding: EdgeInsets.all(1),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        height: 10,
+                        width: 10,
+                        fit: BoxFit.contain,
+                        $iconBug,
+                      ),
+                      SizedBox(width: 2),
+                      SvgPicture.asset(
+                        height: 10,
+                        width: 10,
+                        fit: BoxFit.contain,
+                        $iconFire,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text('#0151', style: TextStyle(color: $white)),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 3),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.contain,
+                  $backgroundPokeball,
+                ),
+                Image.asset(
+                  height: 60,
+                  width: 60,
+                  fit: BoxFit.contain,
+                  $loading,
+                ),
+              ],
+            ),
+            Text('Mew'),
+          ],
+        ),
       ),
     );
   }

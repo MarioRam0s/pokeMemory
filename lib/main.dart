@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pokememory/pages/poke_list.page.dart' show PokeList;
+import 'package:pokememory/pages/poke_list.page.dart' show PokeListPage;
 import 'package:pokememory/utils/const_desing.dart';
 
 void main() {
@@ -15,11 +15,28 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: $primary),
-        appBarTheme: AppBarTheme(backgroundColor: $primary),
+        colorScheme: ColorScheme.fromSeed(seedColor: $colorPrimary),
+        appBarTheme: AppBarTheme(backgroundColor: $colorPrimary),
         fontFamily: $fontRoboto,
+        textTheme: const TextTheme(
+          displayLarge: TextStyle(color: $white),
+          displayMedium: TextStyle(color: $white),
+          displaySmall: TextStyle(color: $white),
+          headlineLarge: TextStyle(color: $white),
+          headlineMedium: TextStyle(color: $white),
+          headlineSmall: TextStyle(color: $white),
+          titleLarge: TextStyle(color: $white),
+          titleMedium: TextStyle(color: $white),
+          titleSmall: TextStyle(color: $white),
+          bodyLarge: TextStyle(color: $white),
+          bodyMedium: TextStyle(color: $white),
+          bodySmall: TextStyle(color: $white),
+          labelLarge: TextStyle(color: $white),
+          labelMedium: TextStyle(color: $white),
+          labelSmall: TextStyle(color: $white),
+        ),
       ),
-      home: PokeList(),
+      home: PokeListPage(),
     );
   }
 }
