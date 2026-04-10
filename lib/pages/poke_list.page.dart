@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pokememory/pages/details_pokemon/details_pokemon.page.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pokememory/shared/drawer.dart';
 import 'package:pokememory/utils/const_desing.dart';
 
 class PokeListPage extends StatefulWidget {
@@ -16,6 +17,26 @@ class _PokeListPageState extends State<PokeListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leadingWidth: 70,
+        leading: Builder(
+          builder: (context) {
+            return Container(
+              width: 60,
+              margin: EdgeInsets.only(left: 15),
+              child: IconButton(
+                icon: SvgPicture.asset(
+                  $iconPokeball,
+                  colorFilter: ColorFilter.mode($white, BlendMode.srcIn),
+                  fit: BoxFit.contain,
+                  height: 30,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            );
+          },
+        ),
         title: Row(
           children: [
             Stack(
@@ -130,6 +151,7 @@ class _PokeListPageState extends State<PokeListPage> {
         foregroundColor: $white,
         icon: Icons.add,
       ),
+      drawer: DrawerShared(),
     );
   }
 }
@@ -141,12 +163,7 @@ class CardPokemon extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute<void>(
-            builder: (BuildContext context) => const DetailsPokemonPage(),
-          ),
-        );
+        context.pushNamed('details-pokemon', pathParameters: {'id': '4'});
       },
       child: Container(
         height: 105,

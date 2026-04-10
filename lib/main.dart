@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:pokememory/pages/poke_list.page.dart' show PokeListPage;
 import 'package:pokememory/utils/const_desing.dart';
+
+import 'pages/router/router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +13,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: $colorPrimary),
@@ -36,7 +38,6 @@ class MyApp extends StatelessWidget {
           labelSmall: TextStyle(color: $white),
         ),
       ),
-      home: PokeListPage(),
     );
   }
 }
