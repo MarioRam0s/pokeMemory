@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pokememory/pages/details_pokemon/details_pokemon.page.dart';
-import 'package:pokememory/pages/poke_list.page.dart';
+import 'package:pokememory/pages/pokemon_list/details_pokemon/details_pokemon.page.dart';
+import 'package:pokememory/pages/pokemon_list/poke_list.page.dart';
 
 final scaffoldKey = GlobalKey<ScaffoldState>();
 final GoRouter appRouter = GoRouter(
