@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+//Urls
+const $webLordDev = 'https://lorddev.netlify.app/';
+
 //Colors
 const Color $colorPrimary = Color.fromRGBO(220, 10, 45, 1);
 const Color $colorSecondary = Color.fromRGBO(40, 40, 40, 1);
@@ -36,12 +39,16 @@ const String $fontPokemon = "Pokemon";
 const String $fontRoboto = "Roboto";
 
 //Images, icons, gifs
+const $lordDev = 'assets/img/lord_dev.svg';
 const $load = 'assets/img/load.gif';
 const $loading = 'assets/img/loading.gif';
 const $loadingPokeball = 'assets/img/loadingPokeball.gif';
 const $placeholder = 'assets/img/placeholder.svg';
 const $iconPokeball = 'assets/img/iconPokeball.svg';
 const $backgroundPokeball = 'assets/img/pokeballBackground.svg';
+const $iconGlasse = 'assets/img/glasse.svg';
+
+// Images icons pokemons
 const $iconBug = 'assets/img/icons_pokemon/bug.svg';
 const $iconFire = 'assets/img/icons_pokemon/fire.svg';
 const $iconDark = 'assets/img/icons_pokemon/dark.svg';

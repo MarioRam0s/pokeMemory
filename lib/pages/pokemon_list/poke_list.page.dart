@@ -1,0 +1,457 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:pokememory/shared/drawer.dart';
+import 'package:pokememory/utils/const_desing.dart';
+
+class PokeListPage extends StatefulWidget {
+  const PokeListPage({super.key});
+
+  @override
+  State<PokeListPage> createState() => _PokeListPageState();
+}
+
+class _PokeListPageState extends State<PokeListPage> {
+  static final Map<String, String> pokemonTypes = {
+    'bug': 'Bicho',
+    'dark': ' Siniestro',
+    'dragon': 'Dragón',
+    'electric': 'Eléctrico',
+    'fairy': 'Hada',
+    'fighting': 'Lucha',
+    'fire': 'Fuego',
+    'flying': 'Volador',
+    'ghost': 'Fantasma',
+    'grass': 'Planta',
+    'ground': 'Tierra',
+    'ice': 'Hielo',
+    'normal': 'Normal',
+    'poison': 'Veneno',
+    'psychic': 'Psíquico',
+    'rock': 'Roca',
+    'steel': 'Acero',
+    'water': 'Agua',
+  };
+
+  static final Map<String, String> pokemonGenerations = {
+    'primera': 'Primera',
+    'segunda': 'Segunda',
+    'tercera': 'Tercera',
+    'cuarta': 'Cuarta',
+    'quinta': 'Quinta',
+    'sexta': 'Sexta',
+    'septima': 'Séptima',
+    'octava': 'Octava',
+    'novena': 'Novena',
+  };
+
+  bool isSelected = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leadingWidth: 70,
+        leading: Builder(
+          builder: (context) {
+            return Container(
+              width: 60,
+              margin: EdgeInsets.only(left: 15),
+              child: IconButton(
+                icon: SvgPicture.asset(
+                  $iconPokeball,
+                  colorFilter: ColorFilter.mode($white, BlendMode.srcIn),
+                  fit: BoxFit.contain,
+                  height: 30,
+                ),
+                onPressed: () {
+                  Scaffold.of(context).openDrawer();
+                },
+              ),
+            );
+          },
+        ),
+        title: Row(
+          children: [
+            Stack(
+              children: [
+                Text(
+                  "Pokédex",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontFamily: $fontPokemon,
+                    foreground:
+                        Paint()
+                          ..style = PaintingStyle.stroke
+                          ..strokeWidth = 2
+                          ..color = $colorPokemonSecondary,
+                  ),
+                ),
+                Text(
+                  "Pokédex",
+                  style: TextStyle(
+                    fontSize: 30,
+                    fontFamily: $fontPokemon,
+                    color: $colorPokemon,
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(width: 25),
+            Expanded(
+              child: TextFormField(
+                onTap: () {},
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
+                  hintText: 'Buscar por nombre',
+                  isDense: true,
+                  fillColor: $white,
+                  filled: true,
+                  prefixIcon: Icon(Icons.search),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+      backgroundColor: $colorPrimary,
+      body: Container(
+        decoration: BoxDecoration(
+          color: $colorSecondary,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        margin: EdgeInsets.all(5),
+        padding: EdgeInsets.all(10),
+        height: double.infinity,
+        width: double.infinity,
+
+        child: GridView.builder(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 3,
+            crossAxisSpacing: 10,
+            mainAxisSpacing: 10,
+          ),
+          itemCount: 52,
+
+          itemBuilder: (context, index) {
+            return CardPokemon();
+          },
+        ),
+      ),
+      floatingActionButton: SpeedDial(
+        backgroundColor: $colorPrimary,
+        spaceBetweenChildren: 20,
+        overlayColor: $black,
+        children: [
+          SpeedDialChild(
+            child: SvgPicture.asset(
+              height: 25,
+              width: 25,
+              fit: BoxFit.contain,
+              $iconPokeball,
+              colorFilter: ColorFilter.mode($colorPrimary, BlendMode.srcIn),
+            ),
+            label: 'All',
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: CircleBorder(),
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.label, color: $colorPrimary),
+            label: 'Types',
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: CircleBorder(),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return SizedBox(
+                    height: 350,
+                    child: Column(
+                      children: [
+                        Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Tipos',
+                            style: TextStyle(
+                              fontSize: 25,
+                              fontWeight: FontWeight.w900,
+                              color: $colorPrimary,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: pokemonTypes.length,
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 30,
+                              vertical: 20,
+                            ),
+                            itemBuilder: (context, index) {
+                              return Row(
+                                children: [
+                                  Expanded(
+                                    child: ListTile(
+                                      leading: SvgPicture.asset(
+                                        height: 35,
+                                        width: 35,
+                                        fit: BoxFit.contain,
+                                        'assets/img/icons_pokemon/${pokemonTypes.keys.toList()[index]}.svg',
+                                      ),
+                                      title: Text(
+                                        pokemonTypes.values.toList()[index],
+                                      ),
+                                      onTap: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ),
+                                  Checkbox(
+                                    value: false,
+                                    onChanged: (value) => {},
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+          SpeedDialChild(
+            child: Icon(Icons.favorite, color: $colorPrimary),
+            label: 'Favorite',
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: CircleBorder(),
+          ),
+
+          SpeedDialChild(
+            child: Icon(Icons.filter_alt, color: $colorPrimary),
+            label: 'Generations',
+            labelStyle: TextStyle(
+              color: $colorPrimary,
+              fontWeight: FontWeight.bold,
+            ),
+            shape: CircleBorder(),
+            onTap: () {
+              showModalBottomSheet(
+                context: context,
+                builder: (context) {
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return SizedBox(
+                        height: 350,
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Text(
+                                'Generaciones',
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: $colorPrimary,
+                                ),
+                              ),
+                            ),
+
+                            Expanded(
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                itemCount: pokemonGenerations.length,
+                                padding: EdgeInsets.only(
+                                  left: 30,
+                                  right: 30,
+                                  bottom: 20,
+                                ),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      childAspectRatio: 1.5,
+                                      crossAxisSpacing: 10,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  return Stack(
+                                    alignment: Alignment.bottomCenter,
+                                    children: [
+                                      Container(
+                                        height: 50,
+                                        padding: EdgeInsets.only(
+                                          left: 22,
+                                          right: 10,
+                                        ),
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: $colorPrimary,
+                                          borderRadius: BorderRadius.circular(
+                                            50,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                pokemonGenerations.values
+                                                    .toList()[index],
+                                                style: TextStyle(
+                                                  color: $white,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Checkbox(
+                                              value: isSelected,
+                                              activeColor: $white,
+                                              checkColor: $colorPrimary,
+                                              side: BorderSide(
+                                                color: $white,
+                                                width: 2,
+                                              ),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  isSelected = !isSelected;
+                                                });
+                                              },
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Container(
+                                        padding: EdgeInsets.only(bottom: 37),
+                                        child: Image.asset(
+                                          fit: BoxFit.contain,
+                                          'assets/img/generations/${pokemonGenerations.keys.toList()[index]}.png',
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  );
+                },
+              );
+            },
+          ),
+        ],
+        elevation: 30,
+        activeIcon: Icons.clear,
+        foregroundColor: $white,
+        icon: Icons.add,
+      ),
+      drawer: DrawerShared(),
+    );
+  }
+}
+
+class CardPokemon extends StatelessWidget {
+  const CardPokemon({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.pushNamed('details-pokemon', pathParameters: {'id': '4'});
+      },
+      child: Container(
+        height: 105,
+        width: 105,
+        padding: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: $colorPsychic,
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Row(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: $white,
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                  ),
+                  padding: EdgeInsets.all(1),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        height: 20,
+                        width: 20,
+                        fit: BoxFit.contain,
+                        $iconBug,
+                      ),
+                      SizedBox(width: 2),
+                      SvgPicture.asset(
+                        height: 20,
+                        width: 20,
+                        fit: BoxFit.contain,
+                        $iconFire,
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      '#0151',
+                      style: TextStyle(
+                        color: $white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                SvgPicture.asset(
+                  height: 50,
+                  width: 50,
+                  fit: BoxFit.contain,
+                  $backgroundPokeball,
+                ),
+                Image.asset(
+                  height: 60,
+                  width: 60,
+                  fit: BoxFit.contain,
+                  $loading,
+                ),
+              ],
+            ),
+            Text(
+              'Mew',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}

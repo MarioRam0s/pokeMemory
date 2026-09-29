@@ -145,10 +145,10 @@ class _DetailsPokemonPageState extends State<DetailsPokemonPage>
                       child: TabBarView(
                         controller: _controller,
                         children: [
-                          About(isload: true),
-                          Kombat(isLoad: true),
-                          Variants(isLoad: true),
-                          Evolutions(isLoad: true),
+                          About(isload: false),
+                          Kombat(isLoad: false),
+                          Variants(isLoad: false),
+                          Evolutions(isLoad: false),
                         ],
                       ),
                     ),
@@ -351,7 +351,7 @@ class Variants extends StatelessWidget {
                   return Column(
                     children: [
                       if (index < 2) SizedBox(height: 20),
-                      Image.asset(width: 125, height: 125, $placeholder),
+                      SvgPicture.asset(width: 125, height: 125, $placeholder),
                       SizedBox(height: 5),
                       Text('Alola shiny'),
                     ],

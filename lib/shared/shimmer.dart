@@ -9,7 +9,7 @@ class ShimmerShared extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Shimmer.fromColors(
-      baseColor: $colorBaseShimmer,
+      baseColor: const Color.fromARGB(255, 168, 167, 167),
       highlightColor: $highlightColorShimmer,
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
