@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pokememory/domain/entities/pokemon_list.entitiy.dart';
+import 'package:pokememory/providers/filters.provider.dart';
+import 'package:pokememory/providers/pokemon_list.provider.dart';
 import 'package:pokememory/shared/drawer.dart';
 import 'package:pokememory/utils/const_desing.dart';
 
-class PokeListPage extends StatefulWidget {
+class PokeListPage extends ConsumerStatefulWidget {
   const PokeListPage({super.key});
 
   @override
-  State<PokeListPage> createState() => _PokeListPageState();
+  ConsumerState<PokeListPage> createState() => _PokeListPageState();
 }
 
-class _PokeListPageState extends State<PokeListPage> {
+class _PokeListPageState extends ConsumerState<PokeListPage> {
   static final Map<String, String> pokemonTypes = {
     'bug': 'Bicho',
     'dark': ' Siniestro',
@@ -46,10 +50,28 @@ class _PokeListPageState extends State<PokeListPage> {
     'novena': 'Novena',
   };
 
+  final ScrollController _scrollController = ScrollController();
   bool isSelected = false;
 
   @override
+  void initState() {
+    super.initState();
+
+    _scrollController.addListener(() {
+      final pokemonState = ref.read(pokemonListProvider);
+      if (pokemonState.isLoading == false) {
+        if (_scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent - 250) {
+          ref.read(pokemonListProvider.notifier).loadMorePokemons();
+        }
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final pokemonState = ref.watch(pokemonListProvider);
+    final isLoading = ref.watch(loading);
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 70,
@@ -128,17 +150,48 @@ class _PokeListPageState extends State<PokeListPage> {
         padding: EdgeInsets.all(10),
         height: double.infinity,
         width: double.infinity,
+        child: pokemonState.when(
+          loading: () {
+            return null;
+          },
+          error: (error, stackTrace) {
+            return Center(child: Text('Error: $error'));
+          },
 
-        child: GridView.builder(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 10,
-            mainAxisSpacing: 10,
-          ),
-          itemCount: 52,
-
-          itemBuilder: (context, index) {
-            return CardPokemon();
+          data: (data) {
+            return Stack(
+              children: [
+                GridView.builder(
+                  controller: _scrollController,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    childAspectRatio: 1.0,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                  ),
+                  itemCount: data.length,
+                  itemBuilder: (context, index) {
+                    final pokemon = data[index];
+                    return CardPokemon(pokemon: pokemon);
+                  },
+                ),
+                if (isLoading) ...[
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: Container(
+                      color: $black.withValues(alpha: 0.5),
+                      width: double.infinity,
+                      height: 60,
+                      child: Center(
+                        child: CircularProgressIndicator(color: $colorPrimary),
+                      ),
+                    ),
+                  ),
+                ],
+              ],
+            );
           },
         ),
       ),
@@ -146,6 +199,7 @@ class _PokeListPageState extends State<PokeListPage> {
         backgroundColor: $colorPrimary,
         spaceBetweenChildren: 20,
         overlayColor: $black,
+
         children: [
           SpeedDialChild(
             child: SvgPicture.asset(
@@ -250,9 +304,16 @@ class _PokeListPageState extends State<PokeListPage> {
               fontWeight: FontWeight.bold,
             ),
             shape: CircleBorder(),
-            onTap: () {
-              showModalBottomSheet(
+
+            onTap: () async {
+              final Map<String, bool> currentGenerations =
+                  Map<String, bool>.from(
+                    ref.read(filterProvider).value!.generation,
+                  );
+
+              final isClosed = await showModalBottomSheet(
                 context: context,
+
                 builder: (context) {
                   return StatefulBuilder(
                     builder: (context, setState) {
@@ -275,7 +336,7 @@ class _PokeListPageState extends State<PokeListPage> {
                             Expanded(
                               child: GridView.builder(
                                 shrinkWrap: true,
-                                itemCount: pokemonGenerations.length,
+                                itemCount: currentGenerations.keys.length,
                                 padding: EdgeInsets.only(
                                   left: 30,
                                   right: 30,
@@ -319,7 +380,9 @@ class _PokeListPageState extends State<PokeListPage> {
                                               ),
                                             ),
                                             Checkbox(
-                                              value: isSelected,
+                                              value:
+                                                  currentGenerations.values
+                                                      .toList()[index],
                                               activeColor: $white,
                                               checkColor: $colorPrimary,
                                               side: BorderSide(
@@ -328,7 +391,10 @@ class _PokeListPageState extends State<PokeListPage> {
                                               ),
                                               onChanged: (value) {
                                                 setState(() {
-                                                  isSelected = !isSelected;
+                                                  currentGenerations[currentGenerations
+                                                          .keys
+                                                          .toList()[index]] =
+                                                      value!;
                                                 });
                                               },
                                             ),
@@ -354,6 +420,12 @@ class _PokeListPageState extends State<PokeListPage> {
                   );
                 },
               );
+
+              if (isClosed == null) {
+                ref
+                    .read(filterProvider.notifier)
+                    .updateGenerations(currentGenerations);
+              }
             },
           ),
         ],
@@ -367,8 +439,36 @@ class _PokeListPageState extends State<PokeListPage> {
   }
 }
 
-class CardPokemon extends StatelessWidget {
-  const CardPokemon({super.key});
+class CardPokemon extends StatefulWidget {
+  final PokemonEntity pokemon;
+
+  const CardPokemon({super.key, required this.pokemon});
+
+  @override
+  State<CardPokemon> createState() => _CardPokemonState();
+}
+
+class _CardPokemonState extends State<CardPokemon> {
+  final Map<String, Color> pokemonTypeColors = {
+    'normal': $colorNormal,
+    'fire': $colorFire,
+    'water': $colorWater,
+    'grass': $colorGrass,
+    'electric': $colorElectric,
+    'ice': $colorIce,
+    'fighting': $colorFighting,
+    'poison': $colorPoison,
+    'ground': $colorGround,
+    'flying': $colorFlying,
+    'psychic': $colorPsychic,
+    'bug': $colorBug,
+    'rock': $colorRock,
+    'ghost': $colorGhost,
+    'dragon': $colorDragon,
+    'dark': $colorDark,
+    'steel': $colorSteel,
+    'fairy': $colorFairy,
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -381,7 +481,12 @@ class CardPokemon extends StatelessWidget {
         width: 105,
         padding: EdgeInsets.all(5),
         decoration: BoxDecoration(
-          color: $colorPsychic,
+          color:
+              Color.lerp(
+                pokemonTypeColors[widget.pokemon.types[0].type.name]!,
+                Colors.white,
+                0.2,
+              )!,
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
         child: Column(
@@ -396,28 +501,25 @@ class CardPokemon extends StatelessWidget {
                   ),
                   padding: EdgeInsets.all(1),
                   child: Row(
-                    children: [
-                      SvgPicture.asset(
-                        height: 20,
-                        width: 20,
-                        fit: BoxFit.contain,
-                        $iconBug,
-                      ),
-                      SizedBox(width: 2),
-                      SvgPicture.asset(
-                        height: 20,
-                        width: 20,
-                        fit: BoxFit.contain,
-                        $iconFire,
-                      ),
-                    ],
+                    spacing: 2,
+                    children:
+                        widget.pokemon.types
+                            .map(
+                              (type) => SvgPicture.asset(
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.contain,
+                                'assets/img/icons_pokemon/${type.type.name}.svg',
+                              ),
+                            )
+                            .toList(),
                   ),
                 ),
                 Expanded(
                   child: Container(
                     alignment: Alignment.centerRight,
                     child: Text(
-                      '#0151',
+                      '#${widget.pokemon.id.toString().padLeft(4, '0')}',
                       style: TextStyle(
                         color: $white,
                         fontSize: 18,
@@ -432,21 +534,32 @@ class CardPokemon extends StatelessWidget {
               alignment: Alignment.center,
               children: [
                 SvgPicture.asset(
-                  height: 50,
-                  width: 50,
-                  fit: BoxFit.contain,
-                  $backgroundPokeball,
-                ),
-                Image.asset(
                   height: 60,
                   width: 60,
                   fit: BoxFit.contain,
-                  $loading,
+                  $backgroundPokeball,
+                ),
+                Image.network(
+                  height: 60,
+                  width: 60,
+                  fit: BoxFit.contain,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    return loadingProgress == null
+                        ? child
+                        : Image.asset(
+                          height: 60,
+                          width: 60,
+                          fit: BoxFit.contain,
+                          $loading,
+                        );
+                  },
+                  widget.pokemon.image ?? $placeholder,
                 ),
               ],
             ),
             Text(
-              'Mew',
+              widget.pokemon.name[0].toUpperCase() +
+                  widget.pokemon.name.substring(1),
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ],
