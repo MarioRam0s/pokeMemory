@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:pokememory/l10n/app_localizations.dart';
 import 'package:pokememory/utils/const_desing.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,20 +28,18 @@ class _DrawerSharedState extends State<DrawerShared> {
                 SvgPicture.asset($lordDev, width: 150),
                 SizedBox(height: 20),
                 ListTile(
-                  title: Text('Pokedex'),
+                  title: Text(AppLocalizations.of(context)!.pokedex),
                   onTap: () {
                     context.goNamed('list-pokemon');
                   },
                   textColor: $white,
-                  trailing: SvgPicture.asset(
-                    $iconPokeball,
-                    colorFilter: ColorFilter.mode($white, BlendMode.srcIn),
-                    fit: BoxFit.contain,
-                    height: 23,
+                  trailing: Transform.rotate(
+                    angle: 160 * pi / 180,
+                    child: Icon(Icons.catching_pokemon, color: $white),
                   ),
                 ),
                 ListTile(
-                  title: Text('Games'),
+                  title: Text(AppLocalizations.of(context)!.games),
                   onTap: () {
                     context.goNamed('games');
                   },
@@ -46,7 +47,7 @@ class _DrawerSharedState extends State<DrawerShared> {
                   trailing: Icon(Icons.sports_esports, color: $white),
                 ),
                 ListTile(
-                  title: Text('LordDev'),
+                  title: Text(AppLocalizations.of(context)!.lordDev),
                   onTap: () async {
                     final Uri url = Uri.parse($webLordDev);
                     await launchUrl(url, mode: LaunchMode.externalApplication);

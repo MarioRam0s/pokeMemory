@@ -98,11 +98,215 @@ abstract class AppLocalizations {
     Locale('es'),
   ];
 
-  /// The conventional newborn programmer greeting
+  /// No description provided for @bug.
   ///
   /// In en, this message translates to:
-  /// **'Hello World!'**
-  String get helloWorld;
+  /// **'Bug'**
+  String get bug;
+
+  /// No description provided for @dark.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get dark;
+
+  /// No description provided for @dragon.
+  ///
+  /// In en, this message translates to:
+  /// **'Dragon'**
+  String get dragon;
+
+  /// No description provided for @electric.
+  ///
+  /// In en, this message translates to:
+  /// **'Electric'**
+  String get electric;
+
+  /// No description provided for @fairy.
+  ///
+  /// In en, this message translates to:
+  /// **'Fairy'**
+  String get fairy;
+
+  /// No description provided for @fighting.
+  ///
+  /// In en, this message translates to:
+  /// **'Fighting'**
+  String get fighting;
+
+  /// No description provided for @fire.
+  ///
+  /// In en, this message translates to:
+  /// **'Fire'**
+  String get fire;
+
+  /// No description provided for @flying.
+  ///
+  /// In en, this message translates to:
+  /// **'Flying'**
+  String get flying;
+
+  /// No description provided for @ghost.
+  ///
+  /// In en, this message translates to:
+  /// **'Ghost'**
+  String get ghost;
+
+  /// No description provided for @grass.
+  ///
+  /// In en, this message translates to:
+  /// **'Grass'**
+  String get grass;
+
+  /// No description provided for @ground.
+  ///
+  /// In en, this message translates to:
+  /// **'Ground'**
+  String get ground;
+
+  /// No description provided for @ice.
+  ///
+  /// In en, this message translates to:
+  /// **'Ice'**
+  String get ice;
+
+  /// No description provided for @normal.
+  ///
+  /// In en, this message translates to:
+  /// **'Normal'**
+  String get normal;
+
+  /// No description provided for @poison.
+  ///
+  /// In en, this message translates to:
+  /// **'Poison'**
+  String get poison;
+
+  /// No description provided for @psychic.
+  ///
+  /// In en, this message translates to:
+  /// **'Psychic'**
+  String get psychic;
+
+  /// No description provided for @rock.
+  ///
+  /// In en, this message translates to:
+  /// **'Rock'**
+  String get rock;
+
+  /// No description provided for @steel.
+  ///
+  /// In en, this message translates to:
+  /// **'Steel'**
+  String get steel;
+
+  /// No description provided for @water.
+  ///
+  /// In en, this message translates to:
+  /// **'Water'**
+  String get water;
+
+  /// No description provided for @first.
+  ///
+  /// In en, this message translates to:
+  /// **'First'**
+  String get first;
+
+  /// No description provided for @second.
+  ///
+  /// In en, this message translates to:
+  /// **'Second'**
+  String get second;
+
+  /// No description provided for @third.
+  ///
+  /// In en, this message translates to:
+  /// **'Third'**
+  String get third;
+
+  /// No description provided for @fourth.
+  ///
+  /// In en, this message translates to:
+  /// **'Fourth'**
+  String get fourth;
+
+  /// No description provided for @fifth.
+  ///
+  /// In en, this message translates to:
+  /// **'Fifth'**
+  String get fifth;
+
+  /// No description provided for @sixth.
+  ///
+  /// In en, this message translates to:
+  /// **'Sixth'**
+  String get sixth;
+
+  /// No description provided for @seventh.
+  ///
+  /// In en, this message translates to:
+  /// **'Seventh'**
+  String get seventh;
+
+  /// No description provided for @eighth.
+  ///
+  /// In en, this message translates to:
+  /// **'Eighth'**
+  String get eighth;
+
+  /// No description provided for @ninth.
+  ///
+  /// In en, this message translates to:
+  /// **'Ninth'**
+  String get ninth;
+
+  /// No description provided for @findNameId.
+  ///
+  /// In en, this message translates to:
+  /// **'Find name/id'**
+  String get findNameId;
+
+  /// No description provided for @generations.
+  ///
+  /// In en, this message translates to:
+  /// **'Generations'**
+  String get generations;
+
+  /// No description provided for @types.
+  ///
+  /// In en, this message translates to:
+  /// **'Types'**
+  String get types;
+
+  /// No description provided for @favorites.
+  ///
+  /// In en, this message translates to:
+  /// **'Favorites'**
+  String get favorites;
+
+  /// No description provided for @all.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get all;
+
+  /// No description provided for @pokedex.
+  ///
+  /// In en, this message translates to:
+  /// **'Pokedex'**
+  String get pokedex;
+
+  /// No description provided for @games.
+  ///
+  /// In en, this message translates to:
+  /// **'Juegos'**
+  String get games;
+
+  /// No description provided for @lordDev.
+  ///
+  /// In en, this message translates to:
+  /// **'LordDev'**
+  String get lordDev;
 }
 
 class _AppLocalizationsDelegate
