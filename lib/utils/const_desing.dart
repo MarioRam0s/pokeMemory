@@ -66,3 +66,15 @@ const $iconPsychic = 'assets/img/icons_pokemon/psychic.svg';
 const $iconRock = 'assets/img/icons_pokemon/rock.svg';
 const $iconSteel = 'assets/img/icons_pokemon/steel.svg';
 const $iconWater = 'assets/img/icons_pokemon/water.svg';
+const $iconFighting = 'assets/img/icons_pokemon/fighting.svg';
+
+// Images generations
+const $firstGeneration = 'assets/img/generations/first.png';
+const $secondGeneration = 'assets/img/generations/second.png';
+const $thirdGeneration = 'assets/img/generations/third.png';
+const $fourthGeneration = 'assets/img/generations/fourth.png';
+const $fifthGeneration = 'assets/img/generations/fifth.png';
+const $sixthGeneration = 'assets/img/generations/sixth.png';
+const $seventhGeneration = 'assets/img/generations/seventh.png';
+const $eighthGeneration = 'assets/img/generations/eighth.png';
+const $ninthGeneration = 'assets/img/generations/ninth.png';

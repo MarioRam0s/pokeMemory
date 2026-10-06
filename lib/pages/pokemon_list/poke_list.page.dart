@@ -1,9 +1,13 @@
+import 'dart:math';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pokememory/domain/entities/pokemon_list.entitiy.dart';
+import 'package:pokememory/l10n/app_localizations.dart';
 import 'package:pokememory/providers/filters.provider.dart';
 import 'package:pokememory/providers/pokemon_list.provider.dart';
 import 'package:pokememory/shared/drawer.dart';
@@ -17,38 +21,9 @@ class PokeListPage extends ConsumerStatefulWidget {
 }
 
 class _PokeListPageState extends ConsumerState<PokeListPage> {
-  static final Map<String, String> pokemonTypes = {
-    'bug': 'Bicho',
-    'dark': ' Siniestro',
-    'dragon': 'Dragón',
-    'electric': 'Eléctrico',
-    'fairy': 'Hada',
-    'fighting': 'Lucha',
-    'fire': 'Fuego',
-    'flying': 'Volador',
-    'ghost': 'Fantasma',
-    'grass': 'Planta',
-    'ground': 'Tierra',
-    'ice': 'Hielo',
-    'normal': 'Normal',
-    'poison': 'Veneno',
-    'psychic': 'Psíquico',
-    'rock': 'Roca',
-    'steel': 'Acero',
-    'water': 'Agua',
-  };
+  static Map<String, List<String>> pokemonTypes = {};
 
-  static final Map<String, String> pokemonGenerations = {
-    'primera': 'Primera',
-    'segunda': 'Segunda',
-    'tercera': 'Tercera',
-    'cuarta': 'Cuarta',
-    'quinta': 'Quinta',
-    'sexta': 'Sexta',
-    'septima': 'Séptima',
-    'octava': 'Octava',
-    'novena': 'Novena',
-  };
+  static Map<String, List<String>> pokemonGenerations = {};
 
   final ScrollController _scrollController = ScrollController();
   bool isSelected = false;
@@ -69,9 +44,50 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final intL = AppLocalizations.of(context)!;
+
+    pokemonTypes = {
+      'bug': [intL.bug, $iconBug],
+      'dark': [intL.dark, $iconDark],
+      'dragon': [intL.dragon, $iconDragon],
+      'electric': [intL.electric, $iconElecric],
+      'fairy': [intL.fairy, $iconFairy],
+      'fighting': [intL.fighting, $iconFighting],
+      'fire': [intL.fire, $iconFire],
+      'flying': [intL.flying, $iconFlying],
+      'ghost': [intL.ghost, $iconGhost],
+      'grass': [intL.grass, $iconGrass],
+      'ground': [intL.ground, $iconGround],
+      'ice': [intL.ice, $iconIce],
+      'normal': [intL.normal, $iconNormal],
+      'poison': [intL.poison, $iconPoison],
+      'psychic': [intL.psychic, $iconPsychic],
+      'rock': [intL.rock, $iconRock],
+      'steel': [intL.steel, $iconSteel],
+      'water': [intL.water, $iconWater],
+    };
+
+    pokemonGenerations = {
+      'first': [intL.first, $firstGeneration],
+      'second': [intL.second, $secondGeneration],
+      'third': [intL.third, $thirdGeneration],
+      'fourth': [intL.fourth, $fourthGeneration],
+      'fifth': [intL.fifth, $fifthGeneration],
+      'sixth': [intL.sixth, $sixthGeneration],
+      'seventh': [intL.seventh, $seventhGeneration],
+      'eighth': [intL.eighth, $eighthGeneration],
+      'ninth': [intL.ninth, $ninthGeneration],
+    };
+  }
+
+  @override
   Widget build(BuildContext context) {
     final pokemonState = ref.watch(pokemonListProvider);
     final isLoading = ref.watch(loading);
+    final intL = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 70,
@@ -81,11 +97,14 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
               width: 60,
               margin: EdgeInsets.only(left: 15),
               child: IconButton(
-                icon: SvgPicture.asset(
-                  $iconPokeball,
-                  colorFilter: ColorFilter.mode($white, BlendMode.srcIn),
-                  fit: BoxFit.contain,
-                  height: 30,
+                icon: Transform.rotate(
+                  angle: 160 * pi / 180,
+                  child: Icon(
+                    Icons.catching_pokemon,
+                    color: $white,
+                    size: 36,
+                    grade: 90,
+                  ),
                 ),
                 onPressed: () {
                   Scaffold.of(context).openDrawer();
@@ -129,7 +148,7 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
                     borderRadius: BorderRadius.circular(50),
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 15.0),
-                  hintText: 'Buscar por nombre',
+                  hintText: intL.findNameId,
                   isDense: true,
                   fillColor: $white,
                   filled: true,
@@ -202,14 +221,8 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
 
         children: [
           SpeedDialChild(
-            child: SvgPicture.asset(
-              height: 25,
-              width: 25,
-              fit: BoxFit.contain,
-              $iconPokeball,
-              colorFilter: ColorFilter.mode($colorPrimary, BlendMode.srcIn),
-            ),
-            label: 'All',
+            child: Icon(Icons.pets, color: $colorPrimary),
+            label: intL.all,
             labelStyle: TextStyle(
               color: $colorPrimary,
               fontWeight: FontWeight.bold,
@@ -217,78 +230,109 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
             shape: CircleBorder(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.label, color: $colorPrimary),
-            label: 'Types',
+            child: Icon(Icons.sell, color: $colorPrimary),
+            label: intL.types,
             labelStyle: TextStyle(
               color: $colorPrimary,
               fontWeight: FontWeight.bold,
             ),
             shape: CircleBorder(),
-            onTap: () {
-              showModalBottomSheet(
+            onTap: () async {
+              final Map<String, bool> typesFilter = Map<String, bool>.from(
+                ref.read(filterProvider).value!.types,
+              );
+
+              final closed = await showModalBottomSheet(
                 context: context,
                 builder: (context) {
-                  return SizedBox(
-                    height: 350,
-                    child: Column(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(top: 10),
-                          child: Text(
-                            'Tipos',
-                            style: TextStyle(
-                              fontSize: 25,
-                              fontWeight: FontWeight.w900,
-                              color: $colorPrimary,
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return SizedBox(
+                        height: 350,
+                        child: Column(
+                          children: [
+                            Container(
+                              margin: EdgeInsets.only(top: 10),
+                              child: Text(
+                                intL.types,
+                                style: TextStyle(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.w900,
+                                  color: $colorPrimary,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: pokemonTypes.length,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 30,
-                              vertical: 20,
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: pokemonTypes.length,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 30,
+                                  vertical: 20,
+                                ),
+                                itemBuilder: (context, index) {
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                        child: ListTile(
+                                          leading: SvgPicture.asset(
+                                            height: 35,
+                                            width: 35,
+                                            fit: BoxFit.contain,
+                                            pokemonTypes.values
+                                                .toList()[index][1],
+                                          ),
+                                          title: Text(
+                                            pokemonTypes.values
+                                                .toList()[index][0],
+                                          ),
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ),
+                                      Checkbox(
+                                        activeColor: $colorPrimary,
+                                        side: BorderSide(
+                                          width: 2,
+                                          color: $colorPrimary,
+                                        ),
+                                        value:
+                                            typesFilter.values.toList()[index],
+                                        onChanged:
+                                            (value) => {
+                                              setState(() {
+                                                typesFilter[typesFilter.keys
+                                                        .toList()[index]] =
+                                                    value!;
+                                              }),
+                                            },
+                                      ),
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
-                            itemBuilder: (context, index) {
-                              return Row(
-                                children: [
-                                  Expanded(
-                                    child: ListTile(
-                                      leading: SvgPicture.asset(
-                                        height: 35,
-                                        width: 35,
-                                        fit: BoxFit.contain,
-                                        'assets/img/icons_pokemon/${pokemonTypes.keys.toList()[index]}.svg',
-                                      ),
-                                      title: Text(
-                                        pokemonTypes.values.toList()[index],
-                                      ),
-                                      onTap: () {
-                                        Navigator.of(context).pop();
-                                      },
-                                    ),
-                                  ),
-                                  Checkbox(
-                                    value: false,
-                                    onChanged: (value) => {},
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      );
+                    },
                   );
                 },
               );
+
+              if (closed == null &&
+                  !mapEquals(
+                    typesFilter,
+                    ref.read(filterProvider).value!.types,
+                  )) {
+                ref.read(filterProvider.notifier).updateTypes(typesFilter);
+              }
             },
           ),
           SpeedDialChild(
             child: Icon(Icons.favorite, color: $colorPrimary),
-            label: 'Favorite',
+            label: intL.favorites,
             labelStyle: TextStyle(
               color: $colorPrimary,
               fontWeight: FontWeight.bold,
@@ -297,8 +341,8 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
           ),
 
           SpeedDialChild(
-            child: Icon(Icons.filter_alt, color: $colorPrimary),
-            label: 'Generations',
+            child: Icon(Icons.catching_pokemon, color: $colorPrimary),
+            label: intL.generations,
             labelStyle: TextStyle(
               color: $colorPrimary,
               fontWeight: FontWeight.bold,
@@ -324,7 +368,7 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
                             Container(
                               margin: EdgeInsets.only(top: 10),
                               child: Text(
-                                'Generaciones',
+                                intL.generations,
                                 style: TextStyle(
                                   fontSize: 25,
                                   fontWeight: FontWeight.w900,
@@ -372,7 +416,7 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
                                             Expanded(
                                               child: Text(
                                                 pokemonGenerations.values
-                                                    .toList()[index],
+                                                    .toList()[index][0],
                                                 style: TextStyle(
                                                   color: $white,
                                                   fontWeight: FontWeight.bold,
@@ -405,7 +449,8 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
                                         padding: EdgeInsets.only(bottom: 37),
                                         child: Image.asset(
                                           fit: BoxFit.contain,
-                                          'assets/img/generations/${pokemonGenerations.keys.toList()[index]}.png',
+                                          pokemonGenerations.values
+                                              .toList()[index][1],
                                         ),
                                       ),
                                     ],
@@ -421,7 +466,11 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
                 },
               );
 
-              if (isClosed == null) {
+              if (isClosed == null &&
+                  !mapEquals(
+                    currentGenerations,
+                    ref.read(filterProvider).value!.generation,
+                  )) {
                 ref
                     .read(filterProvider.notifier)
                     .updateGenerations(currentGenerations);
@@ -439,36 +488,50 @@ class _PokeListPageState extends ConsumerState<PokeListPage> {
   }
 }
 
-class CardPokemon extends StatefulWidget {
+class CardPokemon extends ConsumerStatefulWidget {
   final PokemonEntity pokemon;
 
   const CardPokemon({super.key, required this.pokemon});
 
   @override
-  State<CardPokemon> createState() => _CardPokemonState();
+  ConsumerState<CardPokemon> createState() => _CardPokemonState();
 }
 
-class _CardPokemonState extends State<CardPokemon> {
-  final Map<String, Color> pokemonTypeColors = {
-    'normal': $colorNormal,
-    'fire': $colorFire,
-    'water': $colorWater,
-    'grass': $colorGrass,
-    'electric': $colorElectric,
-    'ice': $colorIce,
-    'fighting': $colorFighting,
-    'poison': $colorPoison,
-    'ground': $colorGround,
-    'flying': $colorFlying,
-    'psychic': $colorPsychic,
-    'bug': $colorBug,
-    'rock': $colorRock,
-    'ghost': $colorGhost,
-    'dragon': $colorDragon,
-    'dark': $colorDark,
-    'steel': $colorSteel,
-    'fairy': $colorFairy,
-  };
+class _CardPokemonState extends ConsumerState<CardPokemon> {
+  static Map<String, Color> pokemonTypeColors = {};
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final intL = AppLocalizations.of(context)!;
+
+    pokemonTypeColors = {
+      intL.normal: $colorNormal,
+      intL.fire: $colorFire,
+      intL.water: $colorWater,
+      intL.grass: $colorGrass,
+      intL.electric: $colorElectric,
+      intL.ice: $colorIce,
+      intL.fighting: $colorFighting,
+      intL.poison: $colorPoison,
+      intL.ground: $colorGround,
+      intL.flying: $colorFlying,
+      intL.psychic: $colorPsychic,
+      intL.bug: $colorBug,
+      intL.rock: $colorRock,
+      intL.ghost: $colorGhost,
+      intL.dragon: $colorDragon,
+      intL.dark: $colorDark,
+      intL.steel: $colorSteel,
+      intL.fairy: $colorFairy,
+    };
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -483,7 +546,9 @@ class _CardPokemonState extends State<CardPokemon> {
         decoration: BoxDecoration(
           color:
               Color.lerp(
-                pokemonTypeColors[widget.pokemon.types[0].type.name]!,
+                pokemonTypeColors[widget.pokemon.types[0].type.name[0]
+                        .toUpperCase() +
+                    widget.pokemon.types[0].type.name.substring(1)]!,
                 Colors.white,
                 0.2,
               )!,
@@ -533,11 +598,13 @@ class _CardPokemonState extends State<CardPokemon> {
             Stack(
               alignment: Alignment.center,
               children: [
-                SvgPicture.asset(
-                  height: 60,
-                  width: 60,
-                  fit: BoxFit.contain,
-                  $backgroundPokeball,
+                Transform.rotate(
+                  angle: 160 * pi / 180,
+                  child: Icon(
+                    Icons.catching_pokemon_rounded,
+                    size: 80,
+                    color: $white.withValues(alpha: 0.15),
+                  ),
                 ),
                 Image.network(
                   height: 60,

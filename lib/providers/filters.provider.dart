@@ -13,20 +13,24 @@ class FilterNotifier extends AsyncNotifier<FilterState> {
   void updateGenerations(Map<String, bool> generations) {
     state = AsyncValue.data(state.value!.copyWith(generation: generations));
   }
+
+  void updateTypes(Map<String, bool> items) {
+    state = AsyncValue.data(state.value!.copyWith(types: items));
+  }
 }
 
 class FilterState {
   int limit = 150;
   Map<String, bool> generation = {
-    'primary': false,
-    'secondary': false,
-    'tertiary': false,
-    'quaternary': false,
-    'quinary': true,
-    'senary': false,
-    'septenary': false,
-    'octonary': false,
-    'nonary': false,
+    'first': false,
+    'second': false,
+    'third': false,
+    'fourth': false,
+    'fifth': true,
+    'sixth': false,
+    'seventh': false,
+    'eighth': false,
+    'ninth': false,
   };
   Map<String, bool> types = {
     'normal': false,
